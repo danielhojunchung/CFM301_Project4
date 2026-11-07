@@ -1,0 +1,18 @@
+variable,meaning
+month,Calendar month YYYY-MM
+date,Daily observation date
+DBAA,"Moody's seasoned Baa corporate yield, percent per annum"
+DGS20,"20-year Treasury constant maturity rate, percent per annum"
+SVENPY20,"Fed fitted off-the-run 20-year PAR yield, percent per annum"
+VIXCLS,CBOE VIX index points
+credit_spread_pct,"DBAA minus DGS20, percentage points"
+credit_spread_bp,"100 times credit_spread_pct, basis points"
+liquidity_proxy_pct,"SVENPY20 minus DGS20, percentage points (approximate proxy)"
+liquidity_proxy_bp,"100 times liquidity_proxy_pct, basis points (approximate proxy)"
+vix,"VIX index points, unscaled"
+expected_default_loss_pct,0.124 annual percentage points based on lecture Baa loss-rate benchmark
+residual_after_default_pct,"Credit spread less assumed annual expected default loss, percentage points"
+d_credit_spread_pct,"Monthly first difference in credit spread, percentage points"
+d_liquidity_proxy_bp,"Monthly first difference in liquidity proxy, basis points"
+d_vix,Monthly first difference in VIX index points
+n_complete_days,Number of within-month days on which all four inputs are nonmissing
