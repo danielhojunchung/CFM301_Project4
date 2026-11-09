@@ -1,0 +1,10 @@
+comparison,value,n
+Slide: spread vs its liquidity measure,0.9555,46
+Our Baa-20y spread vs slide's spread,0.9846,46
+Mean level gap: our spread minus slide's spread (pct pts),-0.7305,46
+Our spread vs our 20y proxy (slide months),0.7496,46
+Our 20y proxy vs slide's liquidity measure,0.6996,46
+Our 20y proxy: min / max (bp); slide: 7.3 / 64.8,,0.9 / 9.3
+Our spread vs our 10y proxy (slide months),0.9517,46
+Our 10y proxy vs slide's liquidity measure,0.9412,46
+Our 10y proxy: min / max (bp); slide: 7.3 / 64.8,,6.2 / 54.3

@@ -1,0 +1,13 @@
+proxy,sample,loss_assumption,avg_spread_pct,expected_loss_pct,loss_share_of_spread,residual_pct,liquidity_part_pct,liquidity_share_of_residual
+20y,Full 1993-10..2026-10,Moody's Baa loss rate 1982-2008 (slide 39),1.8182,0.1240,0.0682,1.6942,0.1720,0.1015
+20y,Full 1993-10..2026-10,Giesecke et al.: 1.5% default x 50% LGD (slide 41),1.8182,0.7500,0.4125,1.0682,0.1720,0.1610
+20y,GFC 2006-01..2009-12,Moody's Baa loss rate 1982-2008 (slide 39),2.3338,0.1240,0.0531,2.2098,0.1907,0.0863
+20y,GFC 2006-01..2009-12,Giesecke et al.: 1.5% default x 50% LGD (slide 41),2.3338,0.7500,0.3214,1.5838,0.1907,0.1204
+20y,COVID 2019-07..2020-05,Moody's Baa loss rate 1982-2008 (slide 39),2.1559,0.1240,0.0575,2.0319,0.2562,0.1261
+20y,COVID 2019-07..2020-05,Giesecke et al.: 1.5% default x 50% LGD (slide 41),2.1559,0.7500,0.3479,1.4059,0.2562,0.1822
+10y,Full 1993-10..2026-10,Moody's Baa loss rate 1982-2008 (slide 39),1.8182,0.1240,0.0682,1.6942,0.0543,0.0320
+10y,Full 1993-10..2026-10,Giesecke et al.: 1.5% default x 50% LGD (slide 41),1.8182,0.7500,0.4125,1.0682,0.0543,0.0508
+10y,GFC 2006-01..2009-12,Moody's Baa loss rate 1982-2008 (slide 39),2.3338,0.1240,0.0531,2.2098,0.0975,0.0441
+10y,GFC 2006-01..2009-12,Giesecke et al.: 1.5% default x 50% LGD (slide 41),2.3338,0.7500,0.3214,1.5838,0.0975,0.0616
+10y,COVID 2019-07..2020-05,Moody's Baa loss rate 1982-2008 (slide 39),2.1559,0.1240,0.0575,2.0319,0.0123,0.0061
+10y,COVID 2019-07..2020-05,Giesecke et al.: 1.5% default x 50% LGD (slide 41),2.1559,0.7500,0.3479,1.4059,0.0123,0.0088

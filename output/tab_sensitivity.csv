@@ -1,0 +1,17 @@
+assumption,corr_20y,corr_10y,n
+"Baseline: monthly levels, full sample 1993-10..2026-10",0.4755,0.4347,397
+"Monthly levels, slide window 2006-01..2009-12",0.7427,0.9483,48
+"Monthly levels, slide's exact months 2006-01..2009-10",0.7496,0.9517,46
+"Monthly levels, COVID 2019-07..2020-05",0.9787,0.8480,11
+"Monthly levels, COVID 2019-07..2020-12 (crosses 20y reissue)",0.5162,0.7291,18
+"Monthly levels, before 20y reissue 1993-10..2020-04",0.4402,0.4040,319
+"Monthly levels, after 20y reissue 2020-06..2026-10",-0.1367,0.0108,77
+"Monthly levels, calm years (ex 2007-07..2009-12, 2020-02..12)",0.5768,0.1376,356
+"Monthly changes, full sample",0.2372,0.3929,396
+"Monthly changes, GFC 2006-01..2009-12",0.2604,0.5801,47
+"Monthly changes, COVID 2019-07..2020-05",0.9257,0.8593,10
+"Daily levels, full sample",0.4712,0.4269,8246
+"Daily levels, GFC 2006..2009",0.7249,0.9346,1000
+"Daily levels, COVID 2019-07-01..2020-05-19",0.8724,0.7842,222
+"Daily changes, COVID 2019-07-01..2020-05-19",0.1857,-0.0088,221
+"End-of-month levels instead of averages, full sample",0.4653,0.4464,397

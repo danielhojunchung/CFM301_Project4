@@ -1,0 +1,5 @@
+proxy,window,corr_levels_monthly,n_months,corr_changes_monthly,corr_levels_daily,n_days,corr_spread_vix_monthly,baseline_spread_pct,peak_spread_pct_daily,rise_spread_pct,baseline_liq_bp,peak_liq_bp_daily,rise_liq_bp,peak_vix_daily,date_peak_spread,date_peak_liq,liq_peak_days_after_spread_peak
+20y,GFC 2006-01..2009-12,0.7427,48,0.2604,0.7249,1000,0.9372,1.4613,5.3800,3.9187,1.2775,11.6800,10.4025,80.8600,2008-12-09,2009-03-24,105
+20y,COVID 2019-07..2020-05,0.9787,11,0.9257,0.8724,222,0.9196,1.8553,3.9500,2.0947,4.4064,9.5100,5.1036,82.6900,2020-03-23,2020-05-08,46
+10y,GFC 2006-01..2009-12,0.9483,48,0.5801,0.9346,1000,0.9372,1.4613,5.3800,3.9187,7.6480,61.2800,53.6321,80.8600,2008-12-09,2008-11-03,-36
+10y,COVID 2019-07..2020-05,0.8480,11,0.8593,0.7842,222,0.9196,1.8553,3.9500,2.0947,1.3989,11.3000,9.9011,82.6900,2020-03-23,2020-03-19,-4

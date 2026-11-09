@@ -19,11 +19,23 @@ invalid_dates,SVENPY20,0,removed; cannot align
 duplicate_dates,SVENPY20,0,keep last for duplicate date
 missing_values,SVENPY20,5744,left NaN; never interpolated
 valid_range,SVENPY20,11314,1981-07-02 to 2026-10-30
+load,DGS10,16699,DGS10.csv
+invalid_dates,DGS10,0,removed; cannot align
+duplicate_dates,DGS10,0,keep last for duplicate date
+missing_values,DGS10,714,left NaN; never interpolated
+valid_range,DGS10,15985,1962-11-05 to 2026-11-05
+load,SVENPY10,17058,yieldcurve.csv
+invalid_dates,SVENPY10,0,removed; cannot align
+duplicate_dates,SVENPY10,0,keep last for duplicate date
+missing_values,SVENPY10,3285,left NaN; never interpolated
+valid_range,SVENPY10,13773,1971-08-16 to 2026-10-30
 align_daily,calendar_union,17062,1961-06-14 to 2026-11-05
 align_missing,DBAA,6814,missing within merged trading-date union
 align_missing,DGS20,2554,missing within merged trading-date union
 align_missing,VIXCLS,7751,missing within merged trading-date union
 align_missing,SVENPY20,5748,missing within merged trading-date union
+align_missing,DGS10,1077,missing within merged trading-date union
+align_missing,SVENPY10,3289,missing within merged trading-date union
 daily_complete,pair_credit_liquidity,8507,available daily rows; missing rows retained in daily CSV
 daily_complete,pair_credit_vix,8261,available daily rows; missing rows retained in daily CSV
 daily_complete,complete_all,8246,available daily rows; missing rows retained in daily CSV

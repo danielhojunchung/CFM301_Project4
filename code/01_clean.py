@@ -2,7 +2,7 @@
 
 Run from repository root: python code/01_clean.py
 Requires pandas and numpy; input files in data/:
-    DBAA.csv, DGS20.csv, VIXCLS.csv, yieldcurve.csv
+    DBAA.csv, DGS20.csv, DGS10.csv, VIXCLS.csv, yieldcurve.csv
 
 Writes:
     data/clean/panel_daily.csv
@@ -47,7 +47,7 @@ def log(step, series, affected, detail=""):
 def read_series(filename, column, date_col, skiprows=0):
     path = DATA / filename
     if not path.exists():
-        raise FileNotFoundError(f"Missing {path}; put all four CSV files in data/")
+        raise FileNotFoundError(f"Missing {path}; put all five CSV files in data/")
     raw = pd.read_csv(path, skiprows=skiprows, low_memory=False)
     if date_col not in raw or column not in raw:
         raise ValueError(f"{filename} lacks {date_col} or {column}; columns: {list(raw.columns)[:15]}")
@@ -74,13 +74,17 @@ baa = read_series("DBAA.csv", "DBAA", "observation_date")
 treasury = read_series("DGS20.csv", "DGS20", "observation_date")
 vix = read_series("VIXCLS.csv", "VIXCLS", "observation_date")
 offrun = read_series("yieldcurve.csv", "SVENPY20", "Date", skiprows=9)
+# Robustness proxy at 10y: the 10-year note was issued continuously, so DGS10 is
+# always based on a genuine on-the-run note (no 2020 reissue break as at 20y).
+treasury10 = read_series("DGS10.csv", "DGS10", "observation_date")
+offrun10 = read_series("yieldcurve.csv", "SVENPY10", "Date", skiprows=9)
 
 # Daily OUTER merge preserves dates and makes missingness explicit. Do not fill
 # holidays and do not align a yield to the previous/next trading date.
-d = pd.concat([baa, treasury, vix, offrun], axis=1, join="outer").sort_index()
+d = pd.concat([baa, treasury, vix, offrun, treasury10, offrun10], axis=1, join="outer").sort_index()
 d.index.name = "date"
 log("align_daily", "calendar_union", len(d), f"{d.index.min():%Y-%m-%d} to {d.index.max():%Y-%m-%d}")
-for col in ["DBAA", "DGS20", "VIXCLS", "SVENPY20"]:
+for col in ["DBAA", "DGS20", "VIXCLS", "SVENPY20", "DGS10", "SVENPY10"]:
     log("align_missing", col, int(d[col].isna().sum()), "missing within merged trading-date union")
 
 # Spread is BBB/Baa index minus 20-year CMT (percent points).
@@ -90,6 +94,8 @@ d["credit_spread_bp"] = 100 * d["credit_spread_pct"]
 d["liquidity_proxy_pct"] = d["SVENPY20"] - d["DGS20"]
 d["liquidity_proxy_bp"] = 100 * d["liquidity_proxy_pct"]
 d["vix"] = d["VIXCLS"]
+# Robustness: 10y fitted off-the-run par yield minus 10y CMT (on-the-run based), bp.
+d["liquidity_proxy10_bp"] = 100 * (d["SVENPY10"] - d["DGS10"])
 d["expected_default_loss_pct"] = EXPECTED_BAA_LOSS_PCT
 d["residual_after_default_pct"] = d["credit_spread_pct"] - EXPECTED_BAA_LOSS_PCT
 
@@ -116,13 +122,14 @@ mg = same.groupby("month")
 m["n_complete_days"] = mg.size()
 m["n_complete_days"] = m["n_complete_days"].fillna(0).astype(int)
 for col in ["DBAA", "DGS20", "SVENPY20", "VIXCLS", "credit_spread_pct", "liquidity_proxy_pct",
-            "credit_spread_bp", "liquidity_proxy_bp", "vix", "residual_after_default_pct"]:
+            "credit_spread_bp", "liquidity_proxy_bp", "vix", "residual_after_default_pct",
+            "DGS10", "SVENPY10", "liquidity_proxy10_bp"]:
     m[col] = mg[col].mean()
 m["expected_default_loss_pct"] = EXPECTED_BAA_LOSS_PCT
 
 # Monthly first differences in LEVELS, not percentage growth rates.
 # Do not bridge over a missing monthly observation.
-for col in ["credit_spread_pct", "liquidity_proxy_bp", "vix"]:
+for col in ["credit_spread_pct", "liquidity_proxy_bp", "vix", "liquidity_proxy10_bp"]:
     m[f"d_{col}"] = m[col].diff()
 
 for series in ["credit_spread_pct", "liquidity_proxy_bp", "vix"]:
@@ -172,6 +179,10 @@ DIC = {
     "liquidity_proxy_pct": "SVENPY20 minus DGS20, percentage points (approximate proxy)",
     "liquidity_proxy_bp": "100 times liquidity_proxy_pct, basis points (approximate proxy)",
     "vix": "VIX index points, unscaled",
+    "DGS10": "10-year Treasury constant maturity rate (on-the-run based), percent per annum",
+    "SVENPY10": "Fed fitted off-the-run 10-year PAR yield, percent per annum",
+    "liquidity_proxy10_bp": "100 x (SVENPY10 - DGS10), basis points; robustness liquidity proxy. "
+                            "Monthly mean over the same complete_all days (10y inputs rarely missing)",
     "expected_default_loss_pct": "0.124 annual percentage points based on lecture Baa loss-rate benchmark",
     "residual_after_default_pct": "Credit spread less assumed annual expected default loss, percentage points",
     "d_credit_spread_pct": "Monthly first difference in credit spread, percentage points",
