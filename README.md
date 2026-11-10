@@ -44,7 +44,7 @@ The FRED files were downloaded on 2026-11-08/09 and run through 2026-11-05.
 | Script | Does | Writes |
 |---|---|---|
 | `01_clean.py` | Loads, cleans and aligns all series. Builds the spread and liquidity proxies. Averages daily data to monthly. | `data/clean/*.csv`; `output/cleaning_log.csv`, `extreme_values.csv`, `data_dictionary.csv` |
-| `02_figures.py` | Dual-axis figures: spread vs the 10y liquidity proxy, for the slide period (Jan 2006–Oct 2009) and the full sample | `output/fig_replication.png` (both panels, used in the report), `output/fig_original_2006_2009.png`, `output/fig_extended.png` |
+| `02_figures.py` | Dual-axis figures: spread vs liquidity proxy, for 2006–2009 and the full sample. 20y proxy: 2006-01 to 2009-12. 10y proxy (main proxy in the report): the slide's exact months, 2006-01 to 2009-10 | 20y: `output/fig_original_2006_2009.png`, `output/fig_extended.png`; 10y: `output/fig_original_2006_2009_10y.png`, `output/fig_extended_10y.png`, `output/fig_replication.png` (both 10y panels; Figure 1 in the report) |
 | `03_crisis_analysis.py` | Everything below, for both liquidity proxies | `output/tab_*.csv`, `output/fig_crisis_comparison.png` |
 
 What `03_crisis_analysis.py` covers:
@@ -62,7 +62,7 @@ What `03_crisis_analysis.py` covers:
 | Requirement | File |
 |---|---|
 | 4. Cleaning (counts per step) | `cleaning_log.csv`, `extreme_values.csv` |
-| 5–6. Figure and correlation, original and extended sample | `fig_replication.png` (report figure), `fig_original_2006_2009.png`, `fig_extended.png` |
+| 5–6. Figure and correlation, original and extended sample | `fig_replication.png` (report Figure 1), `fig_original_2006_2009_10y.png`, `fig_extended_10y.png`; 20y versions: `fig_original_2006_2009.png`, `fig_extended.png` |
 | 7. Comparison to the slide | `tab_slide_comparison.csv` |
 | 8. Liquidity vs default risk | `tab_regressions.csv`, `tab_vix_correlation.csv` |
 | 9. Credit spread puzzle | `tab_puzzle.csv` |
@@ -75,7 +75,7 @@ Column definitions are in `output/data_dictionary.csv`.
 
 - **Credit spread** = DBAA − DGS20, in percentage points. The 20-year Treasury is the closest match to the long maturity of Moody's Baa index.
 - **Liquidity proxies** (fitted off-the-run yield minus the benchmark yield, in basis points):
-  - **10y (main proxy, used in the figures):** `SVENPY10 − DGS10`. DGS10 is always based on the newly issued (on-the-run) 10-year note, so this proxy is consistent over the whole sample.
+  - **10y (main proxy in the report):** `SVENPY10 − DGS10`. DGS10 is always based on the newly issued (on-the-run) 10-year note, so this proxy is consistent over the whole sample.
   - **20y (robustness check):** `SVENPY20 − DGS20`. The Treasury did not issue 20-year bonds from 1986 until it reissued them on 2020-05-20. Before that date DGS20 is itself interpolated; after it, DGS20 tracks the new, thinly traded 20-year bond. This proxy therefore has a structural break, and COVID-window statistics end at 2020-05-19.
 - **Frequency:** monthly averages of daily data. Only days on which all of DBAA, DGS20, VIX and SVENPY20 are available are used, so the series are always measured on the same dates. The sensitivity table also reports daily data and end-of-month values.
 - **Cleaning:**
