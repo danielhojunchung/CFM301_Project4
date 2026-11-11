@@ -2,8 +2,8 @@
 
 Run from repository root after 01_clean.py: python code/03_crisis_analysis.py
 Requires pandas, numpy, matplotlib, statsmodels.
-Reads data/clean/panel_monthly_complete.csv, data/clean/panel_daily.csv and
-'Ch 9 Bonds.pptx' (to extract the data behind the slide-43 chart for comparison).
+Reads data/clean/panel_monthly_complete.csv and data/clean/panel_daily.csv. The data
+behind the slide-43 chart are hardcoded below (SLIDE43_*), copied from 'Ch 9 Bonds.pptx'.
 
 Every table is computed for TWO liquidity proxies (column 'proxy'):
     20y: SVENPY20 - DGS20  (team's original construction)
@@ -26,8 +26,6 @@ drops mechanically. COVID statistics therefore use a window ending 2020-05-19 (d
 kept as a sensitivity check.
 """
 from pathlib import Path
-import re
-import zipfile
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -79,17 +77,40 @@ def ols(df, xs):
 
 
 # ---------------------------------------------------------------- 0. slide comparison
-# The slide-43 chart embeds its data (Baa-Tsy %, on/off-the-run bp, Jan 2006 - Oct 2009).
-with zipfile.ZipFile(ROOT / "Ch 9 Bonds.pptx") as z:
-    xml = z.read("ppt/charts/chart4.xml").decode()
-slide = {}
-for ser in re.findall(r"<c:ser>(.*?)</c:ser>", xml, re.S):
-    vals = re.findall(r"<c:v>([^<]*)</c:v>", ser)
-    n = (len(vals) - 1) // 2                      # name, n dates (Excel serials), n values
-    dates = pd.to_datetime([int(float(v)) for v in vals[1:1 + n]], unit="D", origin="1899-12-30")
-    slide[vals[0]] = pd.Series([float(v) for v in vals[1 + n:]], index=dates.to_period("M").to_timestamp())
-slide = pd.DataFrame(slide)
-slide.columns = ["slide_spread_pct", "slide_liq_bp"]
+# Data behind the slide-43 chart, copied exactly (full stored precision) from the chart
+# embedded in 'Ch 9 Bonds.pptx' (ppt/charts/chart4.xml): series "Baa-Tsy (LH axis)" in %
+# and "On-the-run/Off-the-run (RH axis)" in bp, one value per month, Jan 2006 - Oct 2009
+# (the chart's dates are Excel serials 38718-40087, the first of each of these 46 months).
+SLIDE43_SPREAD_PCT = [
+    1.1800000000000017, 1.1199999999999983, 1.1799999999999986, 1.1799999999999986,
+    1.2199999999999975, 1.2399999999999971, 1.2799999999999974, 1.2700000000000002,
+    1.2700000000000002, 1.2199999999999975, 1.1799999999999986, 1.1700000000000013,
+    1.1199999999999983, 1.1300000000000003, 1.21, 1.1900000000000013,
+    1.1700000000000013, 1.2800000000000007, 1.6500000000000001, 1.8300000000000003,
+    1.9200000000000013, 1.8900000000000001, 2.5599999999999987, 2.63,
+    3.1299999999999994, 3.51, 3.94, 3.36,
+    3.1500000000000008, 3.4299999999999997, 3.6899999999999995, 3.7700000000000005,
+    4.7299999999999995, 7.3999999999999995, 7.9200000000000008, 7.8,
+    6.9899999999999993, 7.0700000000000012, 7.44, 6.2000000000000011,
+    5.1999999999999975, 4.55, 3.8899999999999997, 3.61,
+    3.3999999999999977, 3.3000000000000003,
+]
+SLIDE43_LIQ_BP = [
+    12.144600000000001, 10.761200000000001, 11.742000000000001, 11.798299999999999,
+    9.9508000000000028, 9.3526000000000096, 9.6125000000000007, 7.7458999999999998,
+    8.6944000000000017, 9.5283999999999995, 7.3107999999999995, 7.6093999999999999,
+    9.5228000000000002, 8.3792000000000026, 9.6806000000000001, 11.073700000000002,
+    8.6431999999999984, 9.6011000000000024, 11.466600000000009, 14.023,
+    12.423, 13.028700000000001, 15.636200000000001, 19.271899999999999,
+    21.381799999999973, 24.633900000000018, 27.270099999999989, 27.783399999999975,
+    24.963599999999971, 25.192499999999978, 25.535599999999977, 21.065299999999976,
+    24.034500000000001, 50.804299999999998, 61.950899999999997, 60.998400000000011,
+    64.794100000000071, 60.796400000000013, 53.189400000000006, 44.833300000000001,
+    39.473600000000005, 39.711200000000005, 13.364500000000008, 13.433,
+    15.7651, 16.264800000000001,
+]
+slide = pd.DataFrame({"slide_spread_pct": SLIDE43_SPREAD_PCT, "slide_liq_bp": SLIDE43_LIQ_BP},
+                     index=pd.date_range("2006-01-01", periods=46, freq="MS"))
 j = slide.join(m)
 comp = [{"comparison": "Slide: spread vs its liquidity measure",
          "corr": j["slide_spread_pct"].corr(j["slide_liq_bp"]), "n": len(j)},
